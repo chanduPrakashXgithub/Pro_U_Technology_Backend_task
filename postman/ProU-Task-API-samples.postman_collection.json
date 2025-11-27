@@ -1,0 +1,257 @@
+{
+    "info": {
+        "name": "ProU Task API - Samples",
+        "_postman_id": "b8f2e7d0-0000-4f2d-9000-abcdef123456",
+        "description": "Sample requests for the ProU Task Management API (Employees & Tasks). Import into Postman and set `base_url` and optionally `token` environment variables.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:5000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Create Employee",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Alice Smith\",\n  \"role\": \"Developer\",\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/employees",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "employees"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Login (get token)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/employees/login",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "employees",
+                        "login"
+                    ]
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "// Store token in environment variable 'token'",
+                            "if (pm.response.code === 200 || pm.response.code === 201) {",
+                            "  try {",
+                            "    var json = pm.response.json();",
+                            "    if (json.token) {",
+                            "      pm.environment.set('token', json.token);",
+                            "      console.log('Token saved to environment variable `token`.');",
+                            "    } else if (json.token === undefined && json.employee && json.employee.token) {",
+                            "      // some endpoints may return token inside nested object",
+                            "      pm.environment.set('token', json.employee.token);",
+                            "    }",
+                            "  } catch (e) { console.log('Could not parse token from response', e); }",
+                            "}"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "response": []
+        },
+        {
+            "name": "List Employees (protected)",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/employees",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "employees"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Create Task (protected)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"title\": \"Implement API endpoints\",\n  \"description\": \"Add tasks endpoints and validation\",\n  \"status\": \"Pending\",\n  \"assignee\": null,\n  \"dueDate\": null\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/tasks",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "tasks"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "List Tasks (public)",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/tasks",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "tasks"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Get Task by ID (public)",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/tasks/:taskId",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "tasks",
+                        ":taskId"
+                    ],
+                    "variable": [
+                        {
+                            "key": "taskId",
+                            "value": "<replace-with-task-id>"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Update Task (protected)",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"status\": \"In Progress\",\n  \"assignee\": \"<employeeId>\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/tasks/:taskId",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "tasks",
+                        ":taskId"
+                    ],
+                    "variable": [
+                        {
+                            "key": "taskId",
+                            "value": "<replace-with-task-id>"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Delete Task (protected)",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/tasks/:taskId",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "tasks",
+                        ":taskId"
+                    ],
+                    "variable": [
+                        {
+                            "key": "taskId",
+                            "value": "<replace-with-task-id>"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
