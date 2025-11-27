@@ -3,6 +3,7 @@
 Simple Task Management backend (Employees ↔ Tasks) built with Node.js, Express and MongoDB (Mongoose).
 
 **Live demo:** https://pro-u-technology-backend-task.onrender.com
+**For Testing** Refer READ_ME LIVE , provided Json examples to test APIs
 
 **Tech stack:** Node.js, Express, MongoDB (Mongoose), JWT, bcrypt, express-validator
 
@@ -112,8 +113,6 @@ npm run seed
 
 - Auth: endpoints requiring modification/creation use JWT; include `Authorization: Bearer <token>` header for protected routes.
 - Allowed `status` values for tasks: `Pending`, `In Progress`, `Completed`, `Cancelled`.
-- The `assignee` field stores an `Employee` `_id` reference.
-
-If you want, I can update this README further with example responses (live IDs) after you confirm the seeded accounts or provide a sample token.
+- The `assignee` field stores an `Employee` `_id` reference
 
 
