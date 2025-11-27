@@ -126,10 +126,3 @@ Postman
 - Import `postman/ProU-Task-API-samples.postman_collection.json` and set the environment variable `base_url` to `https://pro-u-technology-backend-task.onrender.com`.
 - Run the requests in order: Create Employee → Login (stores token) → Create Task → List/Update/Delete.
 
-Tips and troubleshooting
-- If login returns `401`, verify credentials and that you are using the correct seeded user or created account.
-- If you get connection errors, check the live URL in a browser and verify Render is up.
-- For production/Render, do not expose `.env` or commit credentials. Use Render dashboard environment variables.
-
-Contact / Next steps
-- If you want, I can run a live smoke-test (create account → login → create task) and paste the exact request/response JSON here for inclusion in `README_LIVE.md`.
